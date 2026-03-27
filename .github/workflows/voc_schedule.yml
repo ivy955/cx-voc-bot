@@ -1,0 +1,33 @@
+name: VOC Daily Bot
+
+on:
+  schedule:
+    # 오후 7시 KST = UTC 10:00 (KST = UTC+9)
+    # 월~금 영업일만 실행
+    - cron: '0 10 * * 1-5'
+  workflow_dispatch:  # 수동 실행 버튼 (테스트용)
+
+jobs:
+  run-voc-bot:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: VOC 봇 실행
+        env:
+          SLACK_BOT_TOKEN:   ${{ secrets.SLACK_BOT_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SOURCE_CHANNEL_ID: ${{ secrets.SOURCE_CHANNEL_ID }}
+          TARGET_CHANNEL_ID: ${{ secrets.TARGET_CHANNEL_ID }}
+          VOC_BOT_USER_ID:   ${{ secrets.VOC_BOT_USER_ID }}
+        run: python voc_bot.py
