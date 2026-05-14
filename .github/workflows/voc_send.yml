@@ -1,0 +1,29 @@
+name: VOC Send Bot
+
+on:
+  schedule:
+    # 오전 9시 KST = UTC 00:00
+    # 월~금만 실행
+    - cron: '0 0 * * 1-5'
+  workflow_dispatch:  # 수동 실행 버튼 (테스트용)
+
+jobs:
+  send-voc-message:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 패키지 설치
+        run: pip install slack-sdk holidays
+
+      - name: VOC 메시지 발송
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN_VOC_SEND }}
+        run: python voc_send.py
