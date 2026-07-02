@@ -7,6 +7,7 @@ import os
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
 CHANNEL_ID = "C02CH01V8E4"
 
+KST = datetime.timezone(datetime.timedelta(hours=9))
 client = WebClient(token=SLACK_BOT_TOKEN)
 
 def is_business_day(date):
@@ -14,8 +15,7 @@ def is_business_day(date):
     return date.weekday() < 5 and date not in kr_holidays
 
 def send_voc_message():
-KST = datetime.timezone(datetime.timedelta(hours=9))
-today = datetime.datetime.now(KST)
+    today = datetime.datetime.now(KST)
     if is_business_day(today):
         date_str = f"{today.month}월 {today.day}일"
         message = f"""`VOC` {date_str} VOC 취합
