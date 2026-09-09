@@ -2,10 +2,8 @@ name: VOC Send Bot
 
 on:
   schedule:
-    # 오전 9시 KST = UTC 00:00
-    # 월~금만 실행
-       - cron: '0 23 * * 0-4'
-  workflow_dispatch:  # 수동 실행 버튼 (테스트용)
+    - cron: '0 23 * * 0-4'
+  workflow_dispatch:
 
 jobs:
   send-voc-message:
